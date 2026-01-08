@@ -162,11 +162,18 @@ const notesPanel = document.getElementById('notes-panel');
 tabs.forEach(tab => {
     tab.addEventListener('click', () => {
 
-        // NOTES OVERLAY
+        // TOGGLE NOTES OVERLAY
         if (tab === notesTab) {
-            overlay.classList.add('active');
-            notesPanel.classList.add('active');
-            notesTab.classList.add('active');
+            const isActive = overlay.classList.contains('active');
+            if (isActive) {
+                overlay.classList.remove('active');
+                notesPanel.classList.remove('active');
+                notesTab.classList.remove('active');
+            } else {
+                overlay.classList.add('active');
+                notesPanel.classList.add('active');
+                notesTab.classList.add('active');
+            }
             return;
         }
 

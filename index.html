@@ -97,14 +97,15 @@ body {
 /* === MASONRY NOTES GRID === */
 .notes-grid {
     column-count: 4;
-    column-gap: 0; /* no gap, fills width */
+    column-gap: 8px; /* small horizontal gap between columns */
     width: 100%;
 }
 
 .notes-grid img {
     width: 100%;
-    margin: 0;
+    margin-bottom: 8px;  /* small vertical gap between images */
     break-inside: avoid;
+    opacity: 0.85;
 }
 
 /* Responsive column count */

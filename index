@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tabbed Website</title>
+
+<style>
+body {
+    background-color: #ffffff;
+    color: #251d1d;
+    font-family: serif;
+    margin: 0;
+}
+
+/* === TAB BAR === */
+.tabs {
+    display: flex;
+    background-color: #101010;
+    border-bottom: 1px solid #333;
+    padding-left: 10px;
+    position: relative;
+    z-index: 20;
+}
+
+.tab {
+    padding: 10px 16px;
+    margin-right: 4px;
+    background-color: #1e1e1e;
+    color: #c2c2c2;
+    border: 1px solid #333;
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.tab:hover {
+    background-color: #2a2a2a;
+}
+
+.tab.active {
+    background-color: #161616;
+    color: #ffffff;
+    font-weight: bold;
+}
+
+/* === CONTENT === */
+.content {
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* === TAB PAGES === */
+.tab-page {
+    display: none;
+}
+.tab-page.active {
+    display: block;
+}
+
+/* === OVERLAY === */
+#overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(139, 139, 139, 0.55);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 10;
+}
+
+/* === NOTES PANEL === */
+#notes-panel {
+    position: fixed;
+    top: 70px;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    width: min(92%, 1100px);
+    max-height: 80vh;
+    overflow-y: auto;
+
+    background: rgba(20, 20, 20, 0.85);
+    backdrop-filter: blur(4px);
+
+    padding: 24px;
+    border-radius: 12px;
+
+    opacity: 0;
+    pointer-events: none;
+    /*transition: opacity 0.25s ease, transform 0.25s ease;*/
+
+    z-index: 11;
+}
+
+#overlay.active,
+#notes-panel.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#notes-panel.active {
+    transform: translateX(-50%) translateY(0);
+}
+
+/* === MASONRY NOTES === */
+.notes-grid {
+    column-count: 4;
+    column-gap: 16px;
+}
+
+.notes-grid img {
+    width: 100%;
+    margin-bottom: 16px;
+    break-inside: avoid;
+    border-radius: 6px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.45);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .notes-grid { column-count: 3; }
+}
+@media (max-width: 600px) {
+    .notes-grid { column-count: 2; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Tabs -->
+<div class="tabs">
+    <button class="tab active" data-tab="home">Home</button>
+    <button class="tab" data-tab="about">About</button>
+    <button class="tab" id="notes-tab">Notes</button>
+</div>
+
+<!-- Pages -->
+<div class="content tab-page active" id="home">
+    <h1>Home</h1>
+    <p>This is the home page.</p>
+    <p>Notes will overlay this page.</p>
+</div>
+
+<div class="content tab-page" id="about">
+    <h1>About</h1>
+    <p>This is the about page.</p>
+</div>
+
+<!-- Overlay -->
+<div id="overlay"></div>
+
+<!-- Notes Panel -->
+<div id="notes-panel">
+    <div class="notes-grid">
+        <!-- Replace with your scanned sticky note images -->
+        <img src="notes/note1.png">
+        <img src="notes/note2.png">
+        <img src="notes/note3.png">
+        <img src="notes/note4.png">
+        <img src="notes/note5.png">
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+const tabs = document.querySelectorAll('.tab');
+const pages = document.querySelectorAll('.tab-page');
+const notesTab = document.getElementById('notes-tab');
+const overlay = document.getElementById('overlay');
+const notesPanel = document.getElementById('notes-panel');
+
+tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+
+        // NOTES OVERLAY
+        if (tab === notesTab) {
+            overlay.classList.add('active');
+            notesPanel.classList.add('active');
+            notesTab.classList.add('active');
+            return;
+        }
+
+        // NORMAL PAGE SWITCH
+        overlay.classList.remove('active');
+        notesPanel.classList.remove('active');
+
+        tabs.forEach(t => t.classList.remove('active'));
+        pages.forEach(p => p.classList.remove('active'));
+
+        tab.classList.add('active');
+        document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+});
+
+// Click outside to close notes
+overlay.addEventListener('click', () => {
+    overlay.classList.remove('active');
+    notesPanel.classList.remove('active');
+    notesTab.classList.remove('active');
+});
+</script>
+
+</body>
+</html>
